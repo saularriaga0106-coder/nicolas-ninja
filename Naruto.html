@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Nicolás Ninja">
+<meta name="theme-color" content="#0D1B2A">
+<title>Nicolás Ninja Ingeniero</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Segoe UI',Arial,sans-serif;background:linear-gradient(160deg,#0D1B2A,#1A2F45,#243B55);min-height:100vh;color:#F0F0F0;padding:16px 16px 60px}
+a{text-decoration:none}
+button{cursor:pointer;font-family:inherit}
+.card{background:#1A2F45;border-radius:14px;padding:16px;margin-bottom:14px}
+.btn{border:none;border-radius:10px;padding:10px 16px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit}
+.btn-orange{background:#E8690B;color:#0D1B2A}
+.btn-red{background:#C0392B;color:#F0F0F0}
+.btn-green{background:#27AE60;color:#F0F0F0}
+.btn-blue{background:#2980B9;color:#F0F0F0}
+.btn-gray{background:#243B55;color:#F0F0F0;border:1.5px solid #243B55}
+input,textarea,select{background:#0D1B2A;border:1.5px solid #243B55;border-radius:10px;color:#F0F0F0;font-family:inherit;font-size:14px;padding:10px 12px;width:100%;box-sizing:border-box}
+textarea{resize:none}
+.hidden{display:none}
+/* CELEBRATION */
+#celebration{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;z-index:999;padding:24px}
+#celebration .box{background:linear-gradient(135deg,#C4580A,#C0392B);border-radius:24px;padding:28px;text-align:center;max-width:300px;width:100%}
+/* PROGRESS BAR */
+.prog-bar{background:#0D1B2A;border-radius:99px;height:7px;overflow:hidden;margin-top:6px}
+.prog-fill{height:100%;border-radius:99px;transition:width .5s}
+/* PILLAR BUTTONS */
+.pillar-btn{display:flex;justify-content:space-between;align-items:center;background:#1A2F45;border:2px solid #243B55;border-radius:12px;padding:11px 14px;cursor:pointer;width:100%;margin-bottom:7px;font-family:inherit}
+/* MISSION CARDS */
+.mission-card{background:#1A2F45;border-radius:12px;padding:13px;margin-bottom:9px;cursor:pointer;border-left:4px solid #E8690B}
+/* BADGE CARDS */
+.badge-card{display:flex;align-items:center;gap:14px;background:#1A2F45;border-radius:14px;padding:16px;margin-bottom:10px;border:1.5px solid #243B55}
+/* RANK PATH */
+.rank-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.rank-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+/* LIBRARY */
+.lib-item{display:block;padding:14px 16px;border-bottom:1px solid #243B55;text-decoration:none}
+.lang-tag{border-radius:99px;padding:2px 8px;font-size:10px;color:#F0F0F0;flex-shrink:0;margin-left:10px}
+/* NOTE NAV */
+.note-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.dot-nav{display:flex;justify-content:center;gap:6px;margin-top:10px;flex-wrap:wrap}
+.dot{width:8px;height:8px;border-radius:50%;border:none;cursor:pointer;padding:0}
+/* SCREENS */
+.screen{display:none}
+.screen.active{display:block}
+</style>
+</head>
+<body>
+
+<!-- CELEBRATION OVERLAY -->
+<div id="celebration" class="hidden" onclick="this.classList.add('hidden')" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.75);display:none;align-items:center;justify-content:center;z-index:999;padding:24px">
+  <div class="box">
+    <div style="font-size:52px;margin-bottom:8px">🎉</div>
+    <div id="cel-msg" style="font-size:17px;font-weight:700;margin-bottom:8px"></div>
+    <div id="cel-pts" style="font-size:32px;font-weight:700;color:#F1C40F"></div>
+    <div id="cel-bonus" style="color:#2ECC71;font-weight:700;margin-top:6px"></div>
+  </div>
+</div>
+
+<!-- HOME SCREEN -->
+<div id="screen-home" class="screen active">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <div>
+      <div style="font-size:11px;color:#E8690B;font-weight:700;letter-spacing:1px">🥷 NINJA INGENIERO</div>
+      <div style="font-size:22px;font-weight:700">Nicolás</div>
+    </div>
+    <div style="display:flex;gap:7px">
+      <button class="btn btn-gray" style="font-size:18px;padding:7px 11px" onclick="go('library')">📚</button>
+      <button class="btn btn-gray" style="font-size:18px;padding:7px 11px" onclick="go('badges')">🏅</button>
+      <button class="btn btn-gray" style="font-size:12px;padding:7px 11px" onclick="go('pin')">⚙️</button>
+    </div>
+  </div>
+
+  <!-- RANK CARD -->
+  <div id="rank-card" style="border-radius:18px;padding:16px;margin-bottom:14px;border:2px solid #555">
+    <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+      <div>
+        <div style="font-size:11px;color:#95A5A6">Rango Actual</div>
+        <div id="rank-name" style="font-size:22px;font-weight:700"></div>
+        <div id="rank-desc" style="font-size:11px;color:#95A5A6;margin-top:2px"></div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:11px;color:#95A5A6">Chakra</div>
+        <div id="points-display" style="font-size:26px;font-weight:700;color:#E8690B">0 ⚡</div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:#95A5A6;margin-bottom:4px">
+      <span id="next-rank-label"></span><span id="progress-pct"></span>
+    </div>
+    <div class="prog-bar"><div id="prog-fill" class="prog-fill" style="width:0%;background:linear-gradient(90deg,#7F8C8D,#22c55e)"></div></div>
+  </div>
+
+  <!-- STATS -->
+  <div style="display:flex;gap:8px;margin-bottom:14px">
+    <div class="card" style="flex:1;text-align:center;margin-bottom:0;padding:10px">
+      <div id="stat-avail" style="font-size:18px;font-weight:700;color:#2980B9">0</div>
+      <div style="font-size:10px;color:#95A5A6">Disponibles</div>
+    </div>
+    <div class="card" style="flex:1;text-align:center;margin-bottom:0;padding:10px">
+      <div id="stat-done" style="font-size:18px;font-weight:700;color:#27AE60">0</div>
+      <div style="font-size:10px;color:#95A5A6">Completadas</div>
+    </div>
+    <div class="card" style="flex:1;text-align:center;margin-bottom:0;padding:10px">
+      <div id="stat-streak" style="font-size:18px;font-weight:700;color:#E8690B">0d</div>
+      <div style="font-size:10px;color:#95A5A6">🔥 Racha</div>
+    </div>
+  </div>
+
+  <!-- STREAK BONUS -->
+  <div id="streak-info" class="hidden" style="background:rgba(232,105,11,0.12);border:1px solid rgba(232,105,11,0.35);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#E8690B"></div>
+
+  <!-- PILLARS -->
+  <div style="font-size:13px;font-weight:700;margin-bottom:10px;color:#95A5A6">📅 Elige tu misión de hoy</div>
+  <div id="pillar-list"></div>
+  <button id="clear-filter-btn" class="hidden" onclick="clearFilter()" style="background:transparent;border:none;color:#95A5A6;font-size:12px;margin-bottom:8px;padding:0">Ver todas</button>
+
+  <!-- MISSIONS -->
+  <div style="font-size:14px;font-weight:700;margin-bottom:10px" id="missions-label">📜 Misiones Disponibles</div>
+  <div id="mission-list"></div>
+
+  <!-- COMPLETED -->
+  <div id="completed-section" class="hidden">
+    <div style="font-size:13px;font-weight:700;margin-bottom:10px;color:#95A5A6">✅ Victorias del Ninja (<span id="completed-count">0</span>)</div>
+    <div id="completed-list"></div>
+  </div>
+
+  <!-- RANK PATH -->
+  <div style="font-size:13px;font-weight:700;margin-bottom:10px;color:#95A5A6">🗺️ Camino al Hokage</div>
+  <div class="card" id="rank-path"></div>
+</div>
+
+<!-- MISSION DETAIL SCREEN -->
+<div id="screen-mission" class="screen">
+  <button class="btn btn-gray" style="margin-bottom:14px;font-size:13px" onclick="go('home')">← Volver</button>
+  <div id="mission-detail-content"></div>
+</div>
+
+<!-- BADGES SCREEN -->
+<div id="screen-badges" class="screen">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <div style="font-size:18px;font-weight:700;color:#E8690B">🏅 Insignias Ninja</div>
+    <button class="btn btn-gray" style="font-size:13px" onclick="go('home')">← Volver</button>
+  </div>
+  <div id="badge-count" style="color:#95A5A6;font-size:13px;margin-bottom:16px"></div>
+  <div id="badge-list"></div>
+</div>
+
+<!-- LIBRARY SCREEN -->
+<div id="screen-library" class="screen">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <div style="font-size:18px;font-weight:700;color:#E8690B">📚 Biblioteca Ninja</div>
+    <button class="btn btn-gray" style="font-size:13px" onclick="go('home')">← Volver</button>
+  </div>
+  <div id="lib-cats" style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px"></div>
+  <div id="lib-items" style="background:#1A2F45;border-radius:14px"></div>
+</div>
+
+<!-- PIN SCREEN -->
+<div id="screen-pin" class="screen">
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;padding:24px">
+    <div style="font-size:48px;margin-bottom:8px">🔐</div>
+    <div style="font-size:20px;font-weight:700;color:#E8690B;margin-bottom:16px">Modo Papá</div>
+    <div id="pin-subtitle" style="color:#95A5A6;margin-bottom:12px;text-align:center"></div>
+    <input type="password" inputmode="numeric" id="pin-input" placeholder="••••" style="text-align:center;font-size:24px;width:150px;margin-bottom:10px">
+    <div id="pin-error" style="color:#C0392B;margin-bottom:8px"></div>
+    <button class="btn btn-orange" id="pin-btn" onclick="handlePin()">Entrar</button>
+    <button onclick="go('home')" style="background:transparent;border:none;color:#7F8C8D;margin-top:12px;font-size:14px;cursor:pointer">Cancelar</button>
+  </div>
+</div>
+
+<!-- DAD SCREEN -->
+<div id="screen-dad" class="screen">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <div style="font-size:18px;font-weight:700;color:#E8690B">⚙️ Modo Papá</div>
+    <button class="btn btn-red" onclick="exitDad()">Salir</button>
+  </div>
+
+  <div class="card">
+    <div style="font-weight:700;margin-bottom:10px;color:#E8690B">⚡ Chakra: <span id="dad-points">0</span> pts &nbsp;·&nbsp; 🔥 Racha: <span id="dad-streak">0</span> días</div>
+    <div style="display:flex;gap:8px">
+      <input type="number" id="add-pts-input" placeholder="Ej: 20 o -10" style="flex:1">
+      <button class="btn btn-green" onclick="addManualPoints()">Agregar</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="font-weight:700;margin-bottom:10px;color:#E8690B">📝 Nota del Día</div>
+    <textarea id="note-input" rows="3" placeholder="Ej: Hoy le costó pero lo logró. Estuvo muy concentrado..." style="margin-bottom:8px"></textarea>
+    <button class="btn btn-blue" style="width:100%" onclick="saveNote()">Guardar nota</button>
+  </div>
+
+  <div class="card hidden" id="notes-history">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div style="font-weight:700;color:#E8690B">📓 Historial de Notas</div>
+      <div id="notes-count" style="color:#95A5A6;font-size:12px"></div>
+    </div>
+    <div class="note-nav">
+      <button class="btn btn-gray" id="note-prev" onclick="navNote(1)" style="padding:6px 16px;font-size:20px">‹</button>
+      <div style="text-align:center">
+        <div id="note-date" style="color:#E8690B;font-weight:700;font-size:14px"></div>
+        <div id="note-index" style="color:#4A5568;font-size:11px"></div>
+      </div>
+      <button class="btn btn-gray" id="note-next" onclick="navNote(-1)" style="padding:6px 16px;font-size:20px">›</button>
+    </div>
+    <div id="note-text" style="background:#0D1B2A;border-radius:12px;padding:14px;border-left:3px solid #2980B9;font-size:14px;line-height:1.7"></div>
+    <div class="dot-nav" id="note-dots"></div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div style="font-weight:700;color:#E8690B">📋 Misiones (<span id="dad-mission-count">0</span>)</div>
+      <button class="btn btn-blue" onclick="toggleAddMission()">+ Nueva</button>
+    </div>
+    <div id="add-mission-form" class="hidden" style="background:#0D1B2A;border-radius:12px;padding:14px;margin-bottom:12px">
+      <input id="nm-title" placeholder="Nombre de la misión" style="margin-bottom:8px">
+      <input id="nm-desc" placeholder="Descripción" style="margin-bottom:8px">
+      <textarea id="nm-howto" rows="3" placeholder="Cómo hacerlo (instrucciones para papá)" style="margin-bottom:8px"></textarea>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <select id="nm-rank" style="flex:1">
+          <option value="nino">Niño</option>
+          <option value="genin">Genin</option>
+          <option value="chunin">Chunin</option>
+          <option value="jonin">Jonin</option>
+          <option value="jonin-avanzado">Jonin Avanzado</option>
+          <option value="jonin-elite">Jonin Élite</option>
+          <option value="kage">Kage</option>
+          <option value="hokage">Hokage</option>
+        </select>
+        <select id="nm-pillar" style="flex:1">
+          <option value="ingenieria">Ingeniería</option>
+          <option value="critico">Pensamiento Crítico</option>
+          <option value="logica">Lógica</option>
+          <option value="emocional">Intel. Emocional</option>
+          <option value="resiliencia">Mentalidad Ninja</option>
+          <option value="sabado">Misión Sábado</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <input type="number" id="nm-pts" placeholder="Pts" style="width:70px">
+        <input id="nm-res-label" placeholder="Nombre del recurso" style="flex:1">
+      </div>
+      <input id="nm-res-url" placeholder="URL de YouTube" style="margin-bottom:10px">
+      <button class="btn btn-orange" style="width:100%;color:#0D1B2A" onclick="addCustomMission()">Crear Misión</button>
+    </div>
+    <div id="dad-mission-list" style="max-height:280px;overflow-y:auto"></div>
+  </div>
+
+  <button class="btn btn-gray" style="width:100%;padding:14px" onclick="go('home')">👁️ Ver como Nicolás</button>
+</div>
+
+<script>
+// ============ DATA ============
+const RANKS=[
+  {id:"nino",name:"Niño",emoji:"👦",min:0,color:"#7F8C8D",desc:"El inicio del camino"},
+  {id:"genin",name:"Genin",emoji:"🌿",min:80,color:"#27AE60",desc:"Primer rango ninja oficial"},
+  {id:"chunin",name:"Chunin",emoji:"💧",min:220,color:"#2980B9",desc:"Ninja de rango medio"},
+  {id:"jonin",name:"Jonin",emoji:"⚡",min:480,color:"#8E44AD",desc:"Ninja de élite"},
+  {id:"jonin-avanzado",name:"Jonin Avanzado",emoji:"🔥",min:850,color:"#E8690B",desc:"Maestro de técnicas avanzadas"},
+  {id:"jonin-elite",name:"Jonin Élite",emoji:"🌀",min:1300,color:"#C0392B",desc:"Casi en la cima"},
+  {id:"kage",name:"Kage",emoji:"👁️",min:1900,color:"#F39C12",desc:"Líder de aldea"},
+  {id:"hokage",name:"Hokage",emoji:"🏆",min:2800,color:"#F1C40F",desc:"El ninja más poderoso"},
+];
+const PILLARS=[
+  {id:"ingenieria",label:"⚙️ Ingeniería",short:"Ingeniería",color:"#E8690B",bg:"#2A1A08",day:"Lunes",expert:"Design Thinking · Stanford d.school",principle:"Construye, falla, mejora. El ciclo Imaginar→Planear→Construir→Mejorar es cómo los ingenieros reales trabajan."},
+  {id:"critico",label:"🧠 Pensamiento Crítico",short:"Pensamiento Crítico",color:"#2980B9",bg:"#081A2A",day:"Martes",expert:"Peter Facione · APA · Beau Lotto",principle:"Empieza con preguntas, no respuestas. Los niños de 6-7 pueden evaluar razones y sacar conclusiones si se les da espacio."},
+  {id:"logica",label:"🔢 Lógica",short:"Lógica",color:"#8E44AD",bg:"#1A0A2A",day:"Miércoles",expert:"Jean Piaget · Etapa operaciones concretas",principle:"A los 6-7 años el cerebro está en la etapa ideal para patrones, secuencias y causa-efecto."},
+  {id:"emocional",label:"❤️ Intel. Emocional",short:"Intel. Emocional",color:"#E91E8C",bg:"#2A081A",day:"Jueves",expert:"Dr. Marc Brackett · Yale RULER · Goleman",principle:"RULER: Reconocer, Entender, Etiquetar, Expresar, Regular. Los ninjas saben cómo se sienten ANTES de actuar."},
+  {id:"resiliencia",label:"🔥 Mentalidad Ninja",short:"Mentalidad Ninja",color:"#27AE60",bg:"#081A0E",day:"Viernes",expert:"Carol Dweck · Stanford · Angela Duckworth",principle:"La palabra más poderosa: TODAVÍA NO. El cerebro crece cuando enfrenta retos difíciles, no cuando todo es fácil."},
+  {id:"sabado",label:"⭐ Misión Sábado",short:"Misión Sábado",color:"#F39C12",bg:"#2A1E08",day:"Sábado",expert:"Modelo Predict-Observe-Explain",principle:"El sábado no es examen, es demostración. Nicolás combina pilares y muestra lo que aprendió."},
+];
+const BADGES=[
+  {id:"first",name:"Primera Misión",emoji:"🌟",desc:"Completaste tu primera misión ninja",check:s=>s.done>=1},
+  {id:"five",name:"Cinco Victorias",emoji:"⚡",desc:"Completaste 5 misiones",check:s=>s.done>=5},
+  {id:"ten",name:"Ninja Dedicado",emoji:"🏅",desc:"Completaste 10 misiones",check:s=>s.done>=10},
+  {id:"twenty",name:"Maestro Ninja",emoji:"🌀",desc:"Completaste 20 misiones",check:s=>s.done>=20},
+  {id:"streak3",name:"3 Días Seguidos",emoji:"🔥",desc:"Completaste misiones 3 días consecutivos",check:s=>s.streak>=3},
+  {id:"streak7",name:"Semana Ninja",emoji:"💥",desc:"7 días seguidos. ¡Increíble!",check:s=>s.streak>=7},
+  {id:"allpillars",name:"Ninja Completo",emoji:"🎯",desc:"Al menos una misión de cada pilar",check:s=>s.pillars>=6},
+  {id:"genin",name:"¡Genin!",emoji:"🌿",desc:"Alcanzaste el rango Genin",check:s=>s.pts>=80},
+  {id:"chunin",name:"¡Chunin!",emoji:"💧",desc:"Alcanzaste el rango Chunin",check:s=>s.pts>=220},
+  {id:"jonin",name:"¡Jonin!",emoji:"⚡",desc:"Alcanzaste el rango Jonin",check:s=>s.pts>=480},
+  {id:"hokage",name:"¡HOKAGE!",emoji:"🏆",desc:"¡Lo lograste! Eres el Hokage",check:s=>s.pts>=2800},
+];
+const MOTIVATIONAL=["¡El chakra de Nicolás creció hoy! 🔥","Naruto también tuvo días difíciles. Tú seguiste adelante. 💪","¡Un ninja más fuerte que ayer! ⚡","¡Cada misión te acerca más al Hokage! 🏆","¡Tu mente ninja se hizo más poderosa! 🧠","Rock Lee entrena todos los días. Tú también. 💥","¡Sasuke nunca dejó de mejorar, y tú tampoco! 🌀","Dattebayo! ¡Lo lograste, Nicolás! 🟠","¡Los grandes ninjas nacen de pequeños esfuerzos diarios! 🌟","¡Tu jutsu se hizo más fuerte hoy! 🌀"];
+const BASE_MISSIONS=[
+  {id:"e1",rank:"nino",pillar:"ingenieria",lvl:1,title:"El Primer Puente Ninja",description:"Construye un puente con lo que encuentres en casa: libros, bloques, Lego o cajas. Debe aguantar un juguete pequeño encima.",howto:"1. Busca materiales sin comprar nada.\n2. Dibuja primero cómo lo harás.\n3. Constrúyelo.\n4. Pon un juguete encima. ¿Se cae?\n5. Si se cae, mejóralo una vez.\nPapá: pregunta '¿Por qué crees que se cayó?' antes de ayudar.",resource:{label:"¿Cómo funcionan los puentes?",url:"https://www.youtube.com/results?search_query=como+funcionan+los+puentes+para+ninos+espanol"},points:15},
+  {id:"e2",rank:"nino",pillar:"ingenieria",lvl:1,title:"¿Cómo funciona esto?",description:"Elige UN objeto de casa (linterna, tijeras, grifo). Míralo bien e intenta entender cómo funciona. Explícaselo a papá.",howto:"Papá: No confirmes ni niegues de inmediato. Primero pregunta '¿Por qué crees eso?' Eso activa el pensamiento crítico real. Al final busquen juntos si tenía razón.",resource:{label:"Cómo funcionan las cosas para niños",url:"https://www.youtube.com/results?search_query=como+funcionan+las+cosas+ninos+espanol+educativo"},points:15},
+  {id:"e3",rank:"nino",pillar:"ingenieria",lvl:1,title:"La Torre más Alta",description:"Construye la torre más alta posible con lo que tengas. Luego cuéntale a papá: ¿qué fue lo más difícil?",howto:"La primera torre es exploración libre, sin instrucciones. Deja que él descubra solo qué funciona y qué no. Ese proceso es el núcleo del aprendizaje por indagación.",resource:{label:"Ingeniería de torres para niños",url:"https://www.youtube.com/results?search_query=ingenieria+torres+resistentes+ninos+experimento"},points:15},
+  {id:"e4",rank:"genin",pillar:"ingenieria",lvl:2,title:"Mejora tu Torre",description:"Construye una torre alta y luego mejórala para que no se caiga si la tocas suave. ¿Qué cambios hiciste y por qué?",howto:"El ciclo construir-evaluar-mejorar es Design Thinking básico. Después del primer intento pregunta: '¿Qué no funcionó? ¿Por qué?' Deja que él responda antes de ayudar.",resource:{label:"Design thinking niños paso a paso",url:"https://www.youtube.com/results?search_query=design+thinking+ninos+espanol+construccion"},points:20},
+  {id:"e5",rank:"genin",pillar:"ingenieria",lvl:2,title:"Agua de un Lado al Otro",description:"¿Cómo llevarías agua de un vaso a otro sin cargarlo directamente? Piensa 2 formas y prueba una.",howto:"Materiales posibles: popotes, papel aluminio, trapos, hilo. Deja que intente primero sin ayuda. Si falla pregunta '¿Qué cambiarías?' no le digas cómo. Eso es ingeniería real.",resource:{label:"Experimentos con agua para niños",url:"https://www.youtube.com/results?search_query=experimentos+agua+ninos+casa+facil+espanol"},points:20},
+  {id:"e6",rank:"genin",pillar:"ingenieria",lvl:2,title:"El Paracaídas Ninja",description:"Haz un paracaídas para un juguete pequeño usando una bolsa de plástico e hilo. Pruébalo desde una silla.",howto:"Antes de probarlo pregunta: '¿Qué crees que pasará?' Eso activa predicción y pensamiento científico.",resource:{label:"Cómo hacer un paracaídas casero niños",url:"https://www.youtube.com/results?search_query=como+hacer+paracaidas+casero+ninos+experimento"},points:25},
+  {id:"e7",rank:"chunin",pillar:"ingenieria",lvl:3,title:"Inventa una Máquina",description:"Con cajas, rollos de papel o lo que encuentres construye algo que resuelva un pequeño problema de casa. Explica cómo funciona.",howto:"La solución no tiene que funcionar perfectamente, tiene que ser pensada. El proceso importa más que el resultado.",resource:{label:"Inventores famosos del mundo para niños",url:"https://www.youtube.com/results?search_query=inventores+famosos+historia+ninos+espanol"},points:35},
+  {id:"e8",rank:"chunin",pillar:"ingenieria",lvl:3,title:"El Reto del Huevo",description:"Construye una cápsula con materiales de casa para proteger un huevo si cae desde una silla. Pruébalo y analiza qué pasó.",howto:"Antes: '¿Qué necesita el huevo para no romperse?' Después: '¿Qué mejorarías?' Esto es lo que hacen los ingenieros en pruebas de choque.",resource:{label:"Reto del huevo ingeniería niños",url:"https://www.youtube.com/results?search_query=reto+huevo+caida+ingenieria+ninos+experimento"},points:40},
+  {id:"e9",rank:"chunin",pillar:"ingenieria",lvl:3,title:"Barco que Flota",description:"Construye un barco que flote en agua y aguante el mayor peso posible (monedas u objetos pequeños).",howto:"Primero predice cuántas monedas aguantará. Luego prueba. Luego mejora el diseño. Tres intentos mínimo.",resource:{label:"Barco papel que flota experimento",url:"https://www.youtube.com/results?search_query=barco+papel+que+flota+aguanta+peso+experimento+ninos"},points:40},
+  {id:"e10",rank:"jonin",pillar:"ingenieria",lvl:4,title:"Diseña una Solución Real",description:"Identifica UN problema real en casa. Diseña una solución con dibujo detallado: materiales, pasos y cómo funcionaría.",howto:"Design Thinking completo: Empatizar→Definir→Idear→Prototipar. No tiene que construirlo, solo diseñarlo con detalle.",resource:{label:"Design thinking para niños resolver problemas",url:"https://www.youtube.com/results?search_query=design+thinking+ninos+resolver+problemas+espanol+primaria"},points:60},
+  {id:"e11",rank:"jonin",pillar:"ingenieria",lvl:4,title:"El Puente que Resiste Todo",description:"Construye el puente más resistente posible. Debe cruzar 20cm y aguantar el máximo peso posible. Registra cuánto aguantó.",howto:"Esta es la versión avanzada del primer puente. Ahora es ingeniería con objetivo medible. Ver el video primero.",resource:{label:"Ingeniería de puentes resistentes niños",url:"https://www.youtube.com/results?search_query=ingenieria+puentes+resistentes+experimento+ninos+avanzado"},points:65},
+  {id:"e12",rank:"jonin-avanzado",pillar:"ingenieria",lvl:4,title:"Enseña a Papá a Construir",description:"Elige algo que ya aprendiste a construir. Ahora enseña a papá cómo hacerlo paso a paso. Tú eres el ingeniero experto.",howto:"Enseñar es la forma más poderosa de aprender. Papá: haz preguntas difíciles como si no supieras nada.",resource:{label:"Por qué enseñar ayuda a aprender",url:"https://www.youtube.com/results?search_query=por+que+ensenar+otros+ayuda+aprender+mejor+espanol"},points:75},
+  {id:"c1",rank:"nino",pillar:"critico",lvl:1,title:"El Detective Ninja",description:"Elige un objeto de casa. Hazte 3 preguntas: ¿Qué es? ¿Para qué sirve? ¿Cómo funciona? Cuéntale a papá.",howto:"Papá: No confirmes ni niegues sus respuestas. Primero di '¿Por qué crees eso?' Al final busquen juntos.",resource:{label:"Cómo piensan los científicos niños",url:"https://www.youtube.com/results?search_query=como+piensa+cientifico+metodo+cientifico+ninos+espanol"},points:15},
+  {id:"c2",rank:"nino",pillar:"critico",lvl:1,title:"¿Por qué vuelan los aviones?",description:"Mira el video. Luego dile a papá 2 cosas que aprendiste y 1 pregunta que te quedó.",howto:"La pregunta que le queda es tan importante como lo que aprendió. Eso se llama pensamiento de segundo nivel.",resource:{label:"Por qué vuelan los aviones niños",url:"https://www.youtube.com/results?search_query=por+que+vuelan+aviones+fisica+ninos+espanol+animacion"},points:15},
+  {id:"c3",rank:"genin",pillar:"critico",lvl:2,title:"Predice, Observa, Explica",description:"Antes del experimento de vinagre y bicarbonato: predice qué pasará. Hazlo. Luego explica por qué pasó.",howto:"El método POE es uno de los más efectivos para pensamiento científico. La clave es que prediga ANTES, no después.",resource:{label:"Experimento volcán vinagre bicarbonato",url:"https://www.youtube.com/results?search_query=experimento+volcan+vinagre+bicarbonato+ninos+espanol"},points:25},
+  {id:"c4",rank:"genin",pillar:"critico",lvl:2,title:"Dos Opciones, ¿Cuál Escoges?",description:"Papá te da 2 opciones sobre un problema de casa. Escoge una y da 2 razones de por qué es la mejor.",howto:"El objetivo no es acertar sino razonar. Elogia las razones, no la respuesta correcta.",resource:{label:"Tomar decisiones inteligentes niños",url:"https://www.youtube.com/results?search_query=tomar+decisiones+pensamiento+critico+ninos+espanol"},points:25},
+  {id:"c5",rank:"chunin",pillar:"critico",lvl:3,title:"El Problema del Pueblo",description:"Papá describe un problema real de casa. Nicolás propone UNA solución con 2 razones. Luego papá hace una pregunta difícil.",howto:"Papá: después de su solución pregunta '¿Y qué pasa si eso no funciona?' Eso es pensamiento de segundo nivel.",resource:{label:"Resolver problemas paso a paso niños",url:"https://www.youtube.com/results?search_query=resolver+problemas+pasos+ninos+espanol+educativo"},points:35},
+  {id:"c6",rank:"chunin",pillar:"critico",lvl:3,title:"¿Es Verdad o No?",description:"Papá dice 3 afirmaciones: 2 verdaderas y 1 falsa. Nicolás debe descubrir cuál es falsa y explicar cómo lo supo.",howto:"Usa afirmaciones sobre temas que le interesan: dinosaurios, Minecraft, carros, Naruto.",resource:{label:"Curiosidades verdaderas y falsas ciencia niños",url:"https://www.youtube.com/results?search_query=curiosidades+verdaderas+falsas+ciencia+ninos+espanol"},points:35},
+  {id:"c7",rank:"jonin",pillar:"critico",lvl:4,title:"La Ciencia de Batman",description:"Elige un gadget de Batman e investiga: ¿podría existir en la vida real? ¿Qué necesitaría? Da 3 razones.",howto:"Ver el video juntos. Luego: '¿Qué partes son reales y cuáles ficción?' Esto desarrolla pensamiento crítico.",resource:{label:"Tecnología real de Batman ciencia",url:"https://www.youtube.com/results?search_query=tecnologia+batman+real+ciencia+superheroes+espanol"},points:55},
+  {id:"c8",rank:"jonin",pillar:"critico",lvl:4,title:"Nicolás el Periodista Ninja",description:"Elige un tema que te guste mucho. Investiga 3 datos reales y cuéntalos a papá como si fueras un reportero.",howto:"Que use el video como fuente. Después pregunta: '¿Cómo sabes que eso es verdad?' Enseña a evaluar fuentes.",resource:{label:"Cómo investigar un tema para niños",url:"https://www.youtube.com/results?search_query=como+investigar+tema+ninos+primaria+espanol+aprender"},points:60},
+  {id:"c9",rank:"jonin-avanzado",pillar:"critico",lvl:4,title:"El Gran Debate Ninja",description:"Papá elige un tema con dos posturas. Nicolás defiende una con 3 argumentos. Luego intercambian posturas.",howto:"Temas: '¿Es mejor vivir en ciudad o campo?' Defender ambos lados enseña pensamiento flexible.",resource:{label:"Debate pensamiento crítico niños actividad",url:"https://www.youtube.com/results?search_query=debate+ninos+argumentos+pensamiento+critico+espanol"},points:70},
+  {id:"l1",rank:"nino",pillar:"logica",lvl:1,title:"El Código Secreto Ninja",description:"Inventa un código con símbolos donde cada letra tiene su dibujo. Escribe tu nombre en código.",howto:"Empieza solo con las letras de su nombre. Trabaja pensamiento simbólico, base de matemáticas y programación.",resource:{label:"Códigos secretos para niños cómo hacer",url:"https://www.youtube.com/results?search_query=codigos+secretos+ninos+como+hacer+espanol"},points:15},
+  {id:"l2",rank:"nino",pillar:"logica",lvl:1,title:"Ordena la Misión",description:"Papá describe una tarea del día. Tú ordenas los pasos en el orden correcto.",howto:"Escribe o dibuja cada paso en papelitos y que los ordene físicamente. La secuenciación es el fundamento del pensamiento lógico.",resource:{label:"Secuencias y orden lógico niños primaria",url:"https://www.youtube.com/results?search_query=secuencias+orden+logico+ninos+primaria+espanol"},points:15},
+  {id:"l3",rank:"genin",pillar:"logica",lvl:2,title:"Patrones Ninja",description:"Con objetos de casa crea una secuencia con patrón. Luego crea uno más difícil para que papá adivine qué sigue.",howto:"Empieza con 2 elementos. Sube a 3. Luego mezcla color Y forma. Según Piaget esta es la habilidad cognitiva más importante a los 6-7 años.",resource:{label:"Patrones y secuencias matemáticas niños",url:"https://www.youtube.com/results?search_query=patrones+secuencias+matematicas+ninos+primaria"},points:20},
+  {id:"l4",rank:"genin",pillar:"logica",lvl:2,title:"Causa y Efecto Ninja",description:"Planta 2 semillas iguales. Una la riegas, otra no. Predice qué pasará en 5 días. Obsérvalas cada día.",howto:"Cada día pregunta: '¿Qué notas hoy? ¿Por qué crees que pasó eso?' Al final comparen con la predicción inicial.",resource:{label:"Experimento plantas agua y sin agua",url:"https://www.youtube.com/results?search_query=experimento+plantas+agua+sin+agua+ninos+ciencia"},points:25},
+  {id:"l5",rank:"chunin",pillar:"logica",lvl:3,title:"El Laberinto del Hokage",description:"Dibuja un laberinto con al menos 3 caminos falsos y uno verdadero. Dáselo a papá para que lo resuelva.",howto:"Diseñar un laberinto requiere pensar al revés: primero el camino correcto, luego los falsos. Eso es pensamiento lógico de alto nivel.",resource:{label:"Cómo hacer un laberinto papel paso a paso",url:"https://www.youtube.com/results?search_query=como+hacer+laberinto+papel+ninos+paso+a+paso"},points:35},
+  {id:"l6",rank:"chunin",pillar:"logica",lvl:3,title:"El Juego de las Categorías",description:"Papá pone 10 objetos en la mesa. Nicolás los agrupa en categorías que él mismo invente. Explica por qué.",howto:"No hay categorías correctas o incorrectas. El objetivo es que justifique sus grupos. La justificación es todo.",resource:{label:"Clasificación categorías pensamiento lógico niños",url:"https://www.youtube.com/results?search_query=clasificacion+categorias+pensamiento+logico+ninos+espanol"},points:30},
+  {id:"l7",rank:"jonin",pillar:"logica",lvl:4,title:"Programa a Papá",description:"Nicolás es el programador. Papá es el robot. Nicolás da instrucciones EXACTAS para que papá llegue de un cuarto al otro.",howto:"Reglas: papá solo hace exactamente lo que le dicen. Esto enseña lógica de programación de forma física.",resource:{label:"Pensamiento computacional programación niños juego",url:"https://www.youtube.com/results?search_query=pensamiento+computacional+programacion+ninos+espanol+juego"},points:50},
+  {id:"l8",rank:"jonin",pillar:"logica",lvl:4,title:"El Mapa del Tesoro",description:"Dibuja un mapa detallado de un cuarto de la casa. Esconde un 'tesoro' y escribe instrucciones exactas para encontrarlo.",howto:"Trabaja pensamiento espacial, lógica secuencial y comunicación precisa. Si papá no puede seguirlo, Nicolás debe mejorar las instrucciones.",resource:{label:"Mapas y orientación espacial niños actividad",url:"https://www.youtube.com/results?search_query=mapas+orientacion+espacial+ninos+actividad+espanol"},points:55},
+  {id:"l9",rank:"jonin-avanzado",pillar:"logica",lvl:4,title:"El Sudoku Ninja",description:"Resuelve un sudoku de 4x4 para niños. Si lo terminas, explícale a papá la estrategia que usaste.",howto:"Lo más importante es que explique su estrategia, no solo que lo resuelva. Eso desarrolla metacognición.",resource:{label:"Sudoku para niños cómo jugar aprender",url:"https://www.youtube.com/results?search_query=sudoku+para+ninos+como+jugar+aprender+espanol"},points:65},
+  {id:"em1",rank:"nino",pillar:"emocional",lvl:1,title:"El Medidor de Chakra",description:"Di a papá cómo está tu chakra hoy: ¿Feliz, cansado, emocionado, frustrado? Explica por qué con una frase.",howto:"Esto es el primer paso del RULER de Brackett: Reconocer. No corrijas cómo se siente. Solo escucha y pregunta: '¿Desde cuándo te sientes así?'",resource:{label:"Las emociones para niños espanol educativo",url:"https://www.youtube.com/results?search_query=emociones+para+ninos+espanol+educativo+sentimientos"},points:12},
+  {id:"em2",rank:"nino",pillar:"emocional",lvl:1,title:"El Equipo del Ninja",description:"Nombra 3 personas que son tu equipo en la vida real. ¿Qué te gusta de cada uno?",howto:"Goleman llama a esto conciencia social. Pregunta: '¿Cómo crees que se sienten ellos cuando están contigo?' Eso activa la empatía.",resource:{label:"Importancia amistad familia valores niños",url:"https://www.youtube.com/results?search_query=importancia+amistad+familia+valores+ninos+espanol"},points:12},
+  {id:"em3",rank:"genin",pillar:"emocional",lvl:2,title:"Cuando el Chakra Baja",description:"Recuerda algo que no te salió bien. ¿Cómo te sentiste? ¿Qué hiciste después?",howto:"Brackett dice que etiquetar emociones negativas reduce su intensidad hasta un 50% en el cerebro. El objetivo es hablar, no resolver.",resource:{label:"Cómo manejar la frustración niños",url:"https://www.youtube.com/results?search_query=manejar+frustracion+emociones+dificiles+ninos+espanol"},points:20},
+  {id:"em4",rank:"genin",pillar:"emocional",lvl:2,title:"Leer el Chakra de Otros",description:"Observa a alguien en casa. Sin preguntar: ¿cómo crees que se siente? ¿Qué señales ves?",howto:"Entrena empatía cognitiva. También funciona con personajes de videojuegos: '¿Cómo se siente Mario ahí? ¿Cómo lo sabes?'",resource:{label:"Empatía para niños qué es cómo practicar",url:"https://www.youtube.com/results?search_query=empatia+para+ninos+espanol+que+es+como+practicar"},points:20},
+  {id:"em5",rank:"chunin",pillar:"emocional",lvl:3,title:"El Ninja Regula su Chakra",description:"Cuando te sientas frustrado hoy, practica: respira 4 veces lento antes de reaccionar.",howto:"La regulación emocional es la R final del RULER. No tiene que lograrlo perfecto. El intento es el ejercicio.",resource:{label:"Técnicas respiración calmar emociones niños",url:"https://www.youtube.com/results?search_query=tecnicas+respiracion+calmar+emociones+ninos+espanol"},points:30},
+  {id:"em6",rank:"chunin",pillar:"emocional",lvl:3,title:"El Semáforo de las Emociones",description:"Aprende el truco del semáforo: Rojo=para y respira, Amarillo=piensa qué sientes, Verde=actúa. Practícalo con papá.",howto:"Roleplay: papá crea una situación frustrante inventada. Nicolás practica el semáforo. Técnica de terapia cognitivo-conductual.",resource:{label:"Semáforo emociones niños técnica espanol",url:"https://www.youtube.com/results?search_query=semaforo+emociones+ninos+tecnica+espanol+educativo"},points:35},
+  {id:"em7",rank:"jonin",pillar:"emocional",lvl:4,title:"Naruto y sus Emociones",description:"Naruto se sentía solo y rechazado pero nunca dejó de creer en sí mismo. ¿Hubo algún momento donde tú te sentiste así?",howto:"Usar personajes que él ama para hablar de emociones difíciles es técnica recomendada por psicólogos infantiles.",resource:{label:"Naruto lecciones vida emociones motivación",url:"https://www.youtube.com/results?search_query=naruto+lecciones+vida+creer+uno+mismo+motivacion"},points:45},
+  {id:"em8",rank:"jonin",pillar:"emocional",lvl:4,title:"La Carta del Ninja",description:"Escríbele o dibújale una nota corta a alguien que quieras. Dile una cosa específica que aprecias de esa persona.",howto:"Expresar aprecio específico desarrolla vocabulario emocional avanzado y empatía expresiva.",resource:{label:"Expresar gratitud aprecio niños actividad valores",url:"https://www.youtube.com/results?search_query=expresar+gratitud+aprecio+ninos+actividad+valores+espanol"},points:50},
+  {id:"em9",rank:"jonin-avanzado",pillar:"emocional",lvl:4,title:"El Consejero Ninja",description:"Papá te cuenta un problema inventado de un amigo. Nicolás da un consejo. ¿Qué le diría a ese amigo?",howto:"Dar consejo a otros activa la empatía y la regulación emocional al mismo tiempo.",resource:{label:"Empatía resolver conflictos niños actividad",url:"https://www.youtube.com/results?search_query=empatia+resolver+conflictos+ninos+actividad+espanol"},points:60},
+  {id:"r1",rank:"nino",pillar:"resiliencia",lvl:1,title:"El Jutsu del Todavía No",description:"¿Hay algo que todavía no puedes hacer bien? Díselo a papá y di en voz alta: 'Todavía no puedo, PERO voy a poder.'",howto:"Carol Dweck (Stanford): el poder del Todavía No. Papá: di 'Me gusta cómo lo intentaste' más que 'eres muy inteligente'.",resource:{label:"El poder de creer en ti mismo mentalidad niños",url:"https://www.youtube.com/results?search_query=creer+uno+mismo+mentalidad+crecimiento+ninos+espanol"},points:12},
+  {id:"r2",rank:"nino",pillar:"resiliencia",lvl:1,title:"Inténtalo 3 Veces",description:"Haz algo que sea un poco difícil para ti hoy. Si no te sale, intenta 3 veces antes de pedir ayuda.",howto:"Duckworth llama a esto Grit. La regla de 3 intentos enseña tolerancia a la frustración de forma graduada.",resource:{label:"Nunca rendirse perseverancia cuentos niños",url:"https://www.youtube.com/results?search_query=nunca+rendirse+perseverancia+cuento+ninos+espanol+motivacion"},points:12},
+  {id:"r3",rank:"genin",pillar:"resiliencia",lvl:2,title:"El Registro de Victorias",description:"Escribe o dibuja 3 cosas difíciles que ya superaste en tu vida. Las victorias del ninja no se olvidan.",howto:"La autoeficacia se construye recordando evidencia de victorias pasadas.",resource:{label:"Autoestima confianza niños espanol psicología",url:"https://www.youtube.com/results?search_query=autoestima+confianza+ninos+espanol+educativo+psicologia"},points:20},
+  {id:"r4",rank:"genin",pillar:"resiliencia",lvl:2,title:"Misión Difícil Aceptada",description:"Papá te da un reto un poco por encima de lo que normalmente haces. Acéptalo sin decir 'no puedo'.",howto:"Dweck: si falla la conversación es '¿Qué aprendiste del intento?' no '¿Por qué no pudiste?'",resource:{label:"Mentalidad crecimiento growth mindset niños",url:"https://www.youtube.com/results?search_query=mentalidad+crecimiento+growth+mindset+ninos+espanol"},points:25},
+  {id:"r5",rank:"chunin",pillar:"resiliencia",lvl:3,title:"El Diario del Ninja",description:"Escribe o dibuja UNA cosa difícil que superaste esta semana. ¿Cómo lo lograste?",howto:"La escritura reflexiva activa metacognición. No corrijas la escritura ni los dibujos. El contenido importa.",resource:{label:"Diario reflexión niños emociones escritura",url:"https://www.youtube.com/results?search_query=diario+reflexion+ninos+emociones+escritura+espanol"},points:30},
+  {id:"r6",rank:"chunin",pillar:"resiliencia",lvl:3,title:"Cuando Fallo, Aprendo",description:"Recuerda algo que intentaste y no te salió bien. ¿Qué aprendiste de ese intento? ¿Lo intentarías diferente?",howto:"Dweck: las personas con mente de crecimiento ven el fracaso como información, no como amenaza.",resource:{label:"Aprender de los errores fracaso niños mentalidad",url:"https://www.youtube.com/results?search_query=aprender+errores+fracaso+ninos+mentalidad+crecimiento+espanol"},points:35},
+  {id:"r7",rank:"jonin",pillar:"resiliencia",lvl:4,title:"Naruto y el Grit",description:"Naruto nunca se rindió aunque todos dudaban. ¿En qué te pareces a él? ¿Qué seguirás intentando aunque sea difícil?",howto:"Pregunta: '¿Cuál es TU sueño ninja?' Duckworth dice que el Grit tiene dos partes: pasión y perseverancia.",resource:{label:"Naruto perseverancia motivación nunca rendirse",url:"https://www.youtube.com/results?search_query=naruto+perseverancia+motivacion+nunca+rendirse+espanol"},points:50},
+  {id:"r8",rank:"jonin",pillar:"resiliencia",lvl:4,title:"El Discurso del Ninja",description:"Prepara un discurso corto de 1 minuto sobre algo que lograste después de mucho esfuerzo.",howto:"El acto de narrar un logro propio refuerza la identidad de 'soy alguien que puede lograr cosas difíciles'.",resource:{label:"Hablar en público confianza niños actividad",url:"https://www.youtube.com/results?search_query=hablar+publico+confianza+ninos+actividad+espanol"},points:55},
+  {id:"r9",rank:"jonin-avanzado",pillar:"resiliencia",lvl:4,title:"El Mentor Ninja",description:"Piensa en alguien más joven que tú. ¿Qué consejo le darías sobre no rendirse? Escríbelo o dibújalo.",howto:"Dar consejos sobre resiliencia a otros refuerza las propias creencias. Investigación de Duckworth lo respalda.",resource:{label:"Ser ejemplo para otros valores niños",url:"https://www.youtube.com/results?search_query=ser+ejemplo+otros+valores+ninos+espanol+educativo"},points:65},
+  {id:"s1",rank:"nino",pillar:"sabado",lvl:1,title:"¿Qué Aprendió el Ninja?",description:"Papá hace 3 preguntas sobre lo que aprendiste esta semana. Por cada respuesta con razones, ganas puntos extra.",howto:"Preguntas: '¿Cuál fue la misión más difícil?' '¿Qué aprendiste que no sabías?' '¿Qué harías diferente?' Busca reflexión, no respuestas perfectas.",resource:{label:"Reflexión aprendizaje niños actividad",url:"https://www.youtube.com/results?search_query=reflexion+aprendizaje+ninos+actividad+espanol"},points:35},
+  {id:"s2",rank:"genin",pillar:"sabado",lvl:2,title:"Misión Épica: Construye y Explica",description:"Construye algo, explica cómo lo hiciste, qué problema resuelve y cómo te sentiste. Combo de 3 pilares.",howto:"Ingeniería + Pensamiento Crítico + Inteligencia Emocional al mismo tiempo. Dale 25-30 minutos sin interrumpirlo.",resource:{label:"Proyectos STEM niños casa espanol",url:"https://www.youtube.com/results?search_query=proyectos+STEM+ninos+casa+facil+espanol+ciencia"},points:55},
+  {id:"s3",rank:"chunin",pillar:"sabado",lvl:3,title:"El Reto del Jefe Final",description:"Papá presenta un problema real de casa. Nicolás tiene 20 minutos para pensar, diseñar y proponer una solución.",howto:"Design Thinking completo. No tiene que resolverlo perfecto. El proceso de pensar sistemáticamente es el objetivo.",resource:{label:"Design thinking niños resolver problemas",url:"https://www.youtube.com/results?search_query=design+thinking+ninos+resolver+problemas+espanol+primaria"},points:70},
+  {id:"s4",rank:"jonin",pillar:"sabado",lvl:4,title:"El Ninja Presenta su Proyecto",description:"Elige el mejor proyecto que hayas hecho este mes. Preséntalo a papá: qué hiciste, qué aprendiste, qué fue difícil.",howto:"Esta es la evaluación más completa. Cubre los 4 pilares en una sola sesión. Papá: toma fotos o video.",resource:{label:"Presentar proyecto trabajo niños confianza",url:"https://www.youtube.com/results?search_query=presentar+proyecto+trabajo+ninos+confianza+espanol"},points:90},
+];
+const LIBRARY=[
+  {category:"⚙️ Ingeniería y STEM",items:[
+    {name:"ExpCaseros Kids",desc:"Experimentos caseros en español para 3-7 años. Ciencia con materiales del hogar.",url:"https://www.youtube.com/@ExperimentosCaseros",lang:"ES"},
+    {name:"Crash Course Kids",desc:"Ingeniería y ciencias en videos de 3-5 min con animación.",url:"https://www.youtube.com/@crashcoursekids",lang:"EN"},
+    {name:"HooplaKidz Lab",desc:"Experimentos paso a paso muy visuales. Ideal para hacer junto a él.",url:"https://www.youtube.com/@HooplaKidzLab",lang:"EN"},
+    {name:"Happy Learning",desc:"Ciencias naturales e historia en español con personajes animados.",url:"https://www.youtube.com/@HappyLearningTV",lang:"ES"},
+    {name:"SciShow Kids",desc:"Respuestas a preguntas de ciencia e ingeniería. Visual y entretenido.",url:"https://www.youtube.com/@scishowkids",lang:"EN"},
+    {name:"Aula 365",desc:"Ciencias naturales y sociales con personajes animados para primaria.",url:"https://www.youtube.com/@Aula365oficial",lang:"ES"},
+  ]},
+  {category:"🧠 Pensamiento Crítico y Lógica",items:[
+    {name:"TED-Ed",desc:"Animaciones cortas sobre cómo funciona el mundo. Muchas con subtítulos en español.",url:"https://www.youtube.com/@TEDEd",lang:"EN/ES"},
+    {name:"Curiosamente",desc:"Ciencia y cultura con animaciones en español.",url:"https://www.youtube.com/@Curiosamente",lang:"ES"},
+    {name:"Earth to Luna",desc:"Aventuras científicas para niños de 5-7 años. Visual y divertido.",url:"https://www.youtube.com/results?search_query=earth+to+luna+espanol+ciencia",lang:"EN/ES"},
+    {name:"LlegaExperimentos",desc:"Experimentos con materiales de casa en español.",url:"https://www.youtube.com/results?search_query=llega+experimentos+ninos+espanol+casa",lang:"ES"},
+  ]},
+  {category:"❤️ Inteligencia Emocional",items:[
+    {name:"Marc Brackett - Permission to Feel",desc:"El creador del método RULER de Yale. Su charla TED es imprescindible.",url:"https://www.youtube.com/results?search_query=marc+brackett+permission+to+feel+ted+talk",lang:"EN"},
+    {name:"Emociones para niños",desc:"Videos cortos sobre cada emoción en español.",url:"https://www.youtube.com/results?search_query=las+emociones+para+ninos+espanol+educativo+corto",lang:"ES"},
+    {name:"Intensamente 1 y 2",desc:"La película más respaldada por psicólogos infantiles para hablar de emociones.",url:"https://www.youtube.com/results?search_query=intensamente+2+emociones+explicacion+ninos",lang:"ES"},
+    {name:"Semáforo de emociones",desc:"Técnica visual para regular emociones.",url:"https://www.youtube.com/results?search_query=semaforo+emociones+ninos+tecnica+espanol",lang:"ES"},
+  ]},
+  {category:"🔥 Mentalidad y Resiliencia",items:[
+    {name:"Carol Dweck - El poder del Todavía No",desc:"La charla TED más importante sobre mentalidad de crecimiento.",url:"https://www.youtube.com/results?search_query=carol+dweck+todavia+no+mentalidad+crecimiento+ted",lang:"ES"},
+    {name:"Angela Duckworth - Grit",desc:"Charla TED sobre perseverancia. Para ti como papá.",url:"https://www.youtube.com/results?search_query=angela+duckworth+grit+perseverancia+ted+espanol",lang:"ES"},
+    {name:"Cuentos de perseverancia",desc:"Cuentos cortos en español sobre no rendirse.",url:"https://www.youtube.com/results?search_query=cuentos+perseverancia+no+rendirse+ninos+espanol",lang:"ES"},
+    {name:"Naruto - Momentos motivacionales",desc:"Clips que conectan el universo ninja con la mentalidad de crecimiento.",url:"https://www.youtube.com/results?search_query=naruto+momentos+motivacionales+espanol+nunca+rendirse",lang:"ES"},
+  ]},
+  {category:"📚 Para Ti Como Papá",items:[
+    {name:"Ken Robinson - Do Schools Kill Creativity?",desc:"La charla TED más vista sobre educación.",url:"https://www.youtube.com/results?search_query=ken+robinson+escuelas+creatividad+ted+espanol",lang:"ES"},
+    {name:"Alison Gopnik - Niños como científicos",desc:"Los niños son la división de I+D de la humanidad.",url:"https://www.youtube.com/results?search_query=alison+gopnik+ninos+cientificos+ted+espanol",lang:"ES"},
+    {name:"Khan Academy en Español",desc:"Plataforma de aprendizaje gratuita.",url:"https://es.khanacademy.org",lang:"ES"},
+    {name:"Rita Pierson - Every Kid Needs a Champion",desc:"TÚ eres su mejor maestro.",url:"https://www.youtube.com/results?search_query=rita+pierson+every+kid+needs+champion+espanol",lang:"ES"},
+    {name:"Daniel Goleman - Inteligencia Emocional",desc:"El libro base. Define los 5 pilares del EQ.",url:"https://www.youtube.com/results?search_query=daniel+goleman+emotional+intelligence+resumen+espanol",lang:"ES"},
+  ]},
+];
+
+// ============ STATE ============
+let state={
+  points:0, streak:0, lastDay:null,
+  earnedBadges:[], dadPin:"", dadNotes:[],
+  completedIds:[], customMissions:[],
+  pinStep:0, pinFirst:"",
+  activePillar:null, noteViewIdx:0,
+  addMissionOpen:false, libCat:0,
+  selectedMission:null,
+};
+let allMissions=[];
+
+function save(){
+  try{
+    const d={
+      points:state.points,streak:state.streak,lastDay:state.lastDay,
+      earnedBadges:state.earnedBadges,dadPin:state.dadPin,dadNotes:state.dadNotes,
+      completedIds:state.completedIds,customMissions:state.customMissions
+    };
+    localStorage.setItem("nicolas-ninja-v2",JSON.stringify(d));
+  }catch(e){}
+}
+function load(){
+  try{
+    const raw=localStorage.getItem("nicolas-ninja-v2");
+    if(raw){
+      const d=JSON.parse(raw);
+      Object.assign(state,{
+        points:d.points||0,streak:d.streak||0,lastDay:d.lastDay||null,
+        earnedBadges:d.earnedBadges||[],dadPin:d.dadPin||"",
+        dadNotes:d.dadNotes||[],completedIds:d.completedIds||[],
+        customMissions:d.customMissions||[]
+      });
+    }
+  }catch(e){}
+  buildMissions();
+}
+function buildMissions(){
+  allMissions=[
+    ...BASE_MISSIONS.map(m=>({...m,completed:state.completedIds.includes(m.id)})),
+    ...state.customMissions
+  ];
+}
+function getPillar(id){return PILLARS.find(p=>p.id===id)||PILLARS[0];}
+function getRank(pts){return RANKS.slice().reverse().find(r=>pts>=r.min)||RANKS[0];}
+function getNextRank(pts){const r=getRank(pts);const i=RANKS.findIndex(x=>x.id===r.id);return RANKS[i+1]||null;}
+function unlockedRanks(){return RANKS.filter(r=>state.points>=r.min).map(r=>r.id);}
+
+// ============ NAVIGATION ============
+function go(screen){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+screen).classList.add('active');
+  window.scrollTo(0,0);
+  if(screen==='home') renderHome();
+  if(screen==='badges') renderBadges();
+  if(screen==='library') renderLibrary();
+  if(screen==='dad') renderDad();
+  if(screen==='pin') renderPin();
+}
+
+// ============ HOME ============
+function renderHome(){
+  const pts=state.points;
+  const rank=getRank(pts);
+  const next=getNextRank(pts);
+  const unlocked=unlockedRanks();
+  const available=allMissions.filter(m=>unlocked.includes(m.rank)&&!m.completed);
+  const completed=allMissions.filter(m=>m.completed);
+
+  // rank card
+  const card=document.getElementById('rank-card');
+  card.style.background=`linear-gradient(135deg,${rank.color}28,${rank.color}0A)`;
+  card.style.borderColor=rank.color+'55';
+  document.getElementById('rank-name').style.color=rank.color;
+  document.getElementById('rank-name').textContent=rank.emoji+' '+rank.name;
+  document.getElementById('rank-desc').textContent=rank.desc;
+  document.getElementById('points-display').textContent=pts+' ⚡';
+
+  if(next){
+    const pct=Math.min(100,Math.round(((pts-rank.min)/(next.min-rank.min))*100));
+    document.getElementById('next-rank-label').textContent='→ '+next.name;
+    document.getElementById('progress-pct').textContent=pct+'% · Faltan '+(next.min-pts)+' pts';
+    document.getElementById('prog-fill').style.width=pct+'%';
+    document.getElementById('prog-fill').style.background=`linear-gradient(90deg,${rank.color},${next.color})`;
+  } else {
+    document.getElementById('next-rank-label').textContent='';
+    document.getElementById('progress-pct').textContent='🏆 ¡Hokage!';
+    document.getElementById('prog-fill').style.width='100%';
+  }
+
+  // stats
+  document.getElementById('stat-avail').textContent=available.length;
+  document.getElementById('stat-done').textContent=completed.length;
+  document.getElementById('stat-streak').textContent=state.streak+'d';
+
+  // streak info
+  const si=document.getElementById('streak-info');
+  if(state.streak>0){
+    si.classList.remove('hidden');
+    const msg=state.streak<3?`${3-state.streak} días más para +10pts bonus`:state.streak<7?`${7-state.streak} más para +30pts bonus`:'¡Semana completa! Eres increíble';
+    si.textContent=`🔥 Racha de ${state.streak} día${state.streak!==1?'s':''} · ${msg}`;
+  } else si.classList.add('hidden');
+
+  // pillars
+  const pl=document.getElementById('pillar-list');
+  pl.innerHTML='';
+  PILLARS.forEach(p=>{
+    const count=available.filter(m=>m.pillar===p.id).length;
+    const isActive=state.activePillar===p.id;
+    const btn=document.createElement('button');
+    btn.className='pillar-btn';
+    btn.style.background=isActive?p.bg:'#1A2F45';
+    btn.style.borderColor=isActive?p.color:'#243B55';
+    btn.innerHTML=`<div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:16px">${p.label.split(' ')[0]}</span>
+      <div style="text-align:left">
+        <div style="color:${isActive?p.color:'#F0F0F0'};font-weight:700;font-size:13px">${p.short}</div>
+        <div style="color:#4A5568;font-size:10px">${p.day}</div>
+      </div>
+    </div>
+    <div style="background:${isActive?p.color:'#243B55'};border-radius:99px;padding:2px 10px;color:#F0F0F0;font-size:12px;font-weight:700">${count}</div>`;
+    btn.onclick=()=>{state.activePillar=isActive?null:p.id;renderHome();};
+    pl.appendChild(btn);
+  });
+  const cfb=document.getElementById('clear-filter-btn');
+  state.activePillar?cfb.classList.remove('hidden'):cfb.classList.add('hidden');
+
+  // mission list
+  const filtered=state.activePillar?available.filter(m=>m.pillar===state.activePillar):available;
+  document.getElementById('missions-label').textContent=state.activePillar?'📜 '+getPillar(state.activePillar).label:'📜 Misiones Disponibles';
+  const ml=document.getElementById('mission-list');
+  ml.innerHTML='';
+  if(filtered.length===0){
+    ml.innerHTML=`<div class="card" style="text-align:center;color:#95A5A6">¡Completaste todas las misiones disponibles! 🎉</div>`;
+  } else {
+    filtered.forEach(m=>{
+      const p=getPillar(m.pillar);
+      const div=document.createElement('div');
+      div.className='mission-card';
+      div.style.borderLeftColor=p.color;
+      div.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+            <span style="font-size:10px;color:${p.color};font-weight:700">${p.short}</span>
+            <span style="background:${p.color}22;color:${p.color};border-radius:99px;padding:1px 7px;font-size:10px">Nivel ${m.lvl||1}</span>
+            <span style="color:#4A5568;font-size:10px">${RANKS.find(r=>r.id===m.rank)?.name||''}</span>
+          </div>
+          <div style="font-weight:700;font-size:14px;margin-bottom:3px">${m.title}</div>
+          <div style="color:#95A5A6;font-size:12px;line-height:1.4">${m.description.slice(0,72)}...</div>
+          ${m.howto?'<div style="color:#E8690B;font-size:10px;margin-top:4px">📋 Incluye instrucciones paso a paso</div>':''}
+        </div>
+        <div style="text-align:right;margin-left:10px">
+          <div style="color:#E8690B;font-weight:700;font-size:14px">+${m.points}</div>
+          <div style="color:#95A5A6;font-size:10px">⚡ pts</div>
+        </div>
+      </div>`;
+      div.onclick=()=>showMission(m);
+      ml.appendChild(div);
+    });
+  }
+
+  // completed
+  const cs=document.getElementById('completed-section');
+  if(completed.length>0){
+    cs.classList.remove('hidden');
+    document.getElementById('completed-count').textContent=completed.length;
+    const cl=document.getElementById('completed-list');
+    cl.innerHTML='';
+    completed.slice(0,5).forEach(m=>{
+      const p=getPillar(m.pillar);
+      cl.innerHTML+=`<div style="background:#14532d18;border:1px solid #27AE6033;border-radius:10px;padding:10px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center">
+        <div><div style="color:#2ECC71;font-weight:700;font-size:13px">✓ ${m.title}</div><div style="color:#4A5568;font-size:11px">${p.short}</div></div>
+        <div style="color:#2ECC71;font-size:13px;font-weight:700">+${m.points}⚡</div>
+      </div>`;
+    });
+    if(completed.length>5) cl.innerHTML+=`<div style="color:#95A5A6;font-size:12px;text-align:center">y ${completed.length-5} más...</div>`;
+  } else cs.classList.add('hidden');
+
+  // rank path
+  const rp=document.getElementById('rank-path');
+  const currentRank=getRank(pts);
+  rp.innerHTML='';
+  RANKS.forEach((r,i)=>{
+    const isUnlocked=pts>=r.min;
+    const isCurrent=r.id===currentRank.id;
+    const row=document.createElement('div');
+    row.className='rank-row';
+    row.style.marginBottom=i<RANKS.length-1?'10px':'0';
+    row.innerHTML=`<div class="rank-dot" style="background:${isUnlocked?r.color:'#243B55'};${isCurrent?`border:3px solid ${r.color};box-shadow:0 0 10px ${r.color}`:''}">${isUnlocked?r.emoji:'🔒'}</div>
+      <div style="flex:1">
+        <div style="font-weight:${isCurrent?'700':'400'};color:${isUnlocked?'#F0F0F0':'#4A5568'};font-size:13px">${r.name}${isCurrent?` <span style="color:${r.color};font-size:10px">← Aquí</span>`:''}</div>
+        <div style="font-size:10px;color:#4A5568">${r.min} pts</div>
+      </div>
+      ${isUnlocked&&!isCurrent?'<span style="color:#27AE60;font-size:12px">✓</span>':''}`;
+    rp.appendChild(row);
+  });
+
+  checkBadges();
+}
+
+// ============ MISSION DETAIL ============
+function showMission(m){
+  state.selectedMission=m;
+  const p=getPillar(m.pillar);
+  const content=document.getElementById('mission-detail-content');
+  content.innerHTML=`
+    <div style="background:${p.bg};border:2px solid ${p.color};border-radius:16px;padding:16px;margin-bottom:12px">
+      <div style="color:${p.color};font-weight:700;font-size:12px;margin-bottom:4px">${p.label} · ${p.day} · Nivel ${m.lvl||1}</div>
+      <div style="color:#F0F0F0;font-size:20px;font-weight:700;margin-bottom:8px">${m.title}</div>
+      <div style="color:#cbd5e1;font-size:14px;line-height:1.7">${m.description}</div>
+    </div>
+    ${m.howto?`<div class="card" style="border:1.5px solid #243B55">
+      <div style="color:#E8690B;font-weight:700;font-size:13px;margin-bottom:8px">📋 Cómo hacerlo</div>
+      <div style="color:#cbd5e1;font-size:13px;line-height:1.9;white-space:pre-line">${m.howto}</div>
+    </div>`:''}
+    <div class="card" style="border:1.5px solid rgba(39,174,96,0.2)">
+      <div style="color:#95A5A6;font-size:11px;margin-bottom:4px">Base científica · ${p.expert}</div>
+      <div style="color:#e2e8f0;font-size:13px;line-height:1.6;font-style:italic">"${p.principle}"</div>
+    </div>
+    ${m.resource?.url?`<a href="${m.resource.url}" target="_blank" class="card" style="display:block;border:2px solid #C0392B;margin-bottom:12px">
+      <div style="color:#C0392B;font-weight:700;margin-bottom:4px">▶️ Ver en YouTube</div>
+      <div style="color:#95A5A6;font-size:13px">${m.resource.label||''}</div>
+      <div style="color:#4A5568;font-size:11px;margin-top:2px">Toca para buscar en YouTube</div>
+    </a>`:''}
+    <div class="card" style="text-align:center">
+      <div style="color:#95A5A6;font-size:12px;margin-bottom:4px">Chakra al completar</div>
+      <div style="color:#E8690B;font-size:32px;font-weight:700">+${m.points} ⚡</div>
+    </div>
+    ${m.completed
+      ?'<div style="background:#14532d;border-radius:14px;padding:14px;text-align:center;color:#2ECC71;font-weight:700">✅ ¡Misión Completada, Ninja!</div>'
+      :`<button class="btn" onclick="completeMission('${m.id}')" style="width:100%;background:linear-gradient(135deg,#E8690B,#C0392B);border:none;border-radius:14px;padding:16px;color:#F0F0F0;font-weight:700;font-size:17px">🔥 ¡Misión Completada!</button>`
+    }`;
+  go('mission');
+}
+
+function completeMission(id){
+  const m=allMissions.find(x=>x.id===id);
+  if(!m||m.completed) return;
+  m.completed=true;
+  if(!state.completedIds.includes(id)) state.completedIds.push(id);
+
+  const today=new Date().toDateString();
+  let bonus=0;
+  if(state.lastDay!==today){
+    const prev=new Date(Date.now()-86400000).toDateString();
+    const newStreak=state.lastDay===prev?state.streak+1:1;
+    state.streak=newStreak;
+    state.lastDay=today;
+    if(newStreak===3) bonus=10;
+    if(newStreak===7) bonus=30;
+  }
+  state.points+=m.points+bonus;
+  save();
+  checkBadges();
+
+  const msg=MOTIVATIONAL[Math.floor(Math.random()*MOTIVATIONAL.length)];
+  const cel=document.getElementById('celebration');
+  document.getElementById('cel-msg').textContent=msg;
+  document.getElementById('cel-pts').textContent='+'+m.points+' ⚡';
+  document.getElementById('cel-bonus').textContent=bonus>0?'+'+bonus+' bonus racha 🔥':'';
+  cel.style.display='flex';
+  setTimeout(()=>{cel.style.display='none';go('home');},3000);
+  cel.onclick=()=>{cel.style.display='none';go('home');};
+}
+
+function checkBadges(){
+  const done=allMissions.filter(m=>m.completed).length;
+  const pillars=new Set(allMissions.filter(m=>m.completed).map(m=>m.pillar)).size;
+  const stats={done,pts:state.points,streak:state.streak,pillars};
+  BADGES.forEach(b=>{
+    if(!state.earnedBadges.includes(b.id)&&b.check(stats)){
+      state.earnedBadges.push(b.id);
+      save();
+    }
+  });
+}
+
+// ============ BADGES ============
+function renderBadges(){
+  document.getElementById('badge-count').textContent=`${state.earnedBadges.length} de ${BADGES.length} desbloqueadas`;
+  const bl=document.getElementById('badge-list');
+  bl.innerHTML='';
+  BADGES.forEach(b=>{
+    const earned=state.earnedBadges.includes(b.id);
+    const div=document.createElement('div');
+    div.className='badge-card';
+    div.style.borderColor=earned?'#E8690B':'#243B55';
+    div.style.opacity=earned?'1':'0.45';
+    div.innerHTML=`<div style="font-size:32px;flex-shrink:0">${earned?b.emoji:'🔒'}</div>
+      <div>
+        <div style="font-weight:700;color:${earned?'#E8690B':'#95A5A6'};font-size:15px">${b.name}</div>
+        <div style="color:#95A5A6;font-size:12px;margin-top:2px">${b.desc}</div>
+      </div>`;
+    bl.appendChild(div);
+  });
+}
+
+// ============ LIBRARY ============
+let currentLibCat=0;
+function renderLibrary(){
+  const cats=document.getElementById('lib-cats');
+  cats.innerHTML='';
+  LIBRARY.forEach((c,i)=>{
+    const btn=document.createElement('button');
+    btn.className='btn';
+    btn.style.cssText=`background:transparent;border:1.5px solid ${i===currentLibCat?'#E8690B':'#243B55'};color:${i===currentLibCat?'#E8690B':'#95A5A6'};text-align:left;font-size:13px;padding:10px 14px;font-family:inherit`;
+    btn.textContent=c.category;
+    btn.onclick=()=>{currentLibCat=i;renderLibrary();};
+    cats.appendChild(btn);
+  });
+  const items=document.getElementById('lib-items');
+  items.innerHTML='';
+  LIBRARY[currentLibCat].items.forEach((item,i)=>{
+    const a=document.createElement('a');
+    a.href=item.url;
+    a.target='_blank';
+    a.className='lib-item';
+    a.style.borderBottom=i<LIBRARY[currentLibCat].items.length-1?'1px solid #243B55':'none';
+    const langColor=item.lang==='ES'?'#27AE60':item.lang==='EN'?'#2980B9':'#8E44AD';
+    a.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div style="flex:1">
+        <div style="color:#E8690B;font-weight:700;font-size:14px;margin-bottom:4px">${item.name}</div>
+        <div style="color:#95A5A6;font-size:12px;line-height:1.5">${item.desc}</div>
+      </div>
+      <span class="lang-tag" style="background:${langColor}">${item.lang}</span>
+    </div>`;
+    items.appendChild(a);
+  });
+}
+
+// ============ PIN ============
+function renderPin(){
+  const hasPin=!!state.dadPin;
+  document.getElementById('pin-subtitle').textContent=hasPin?'Ingresa tu PIN':'Crea tu PIN (mínimo 4 dígitos)';
+  document.getElementById('pin-btn').textContent=hasPin?'Entrar':'Continuar';
+  document.getElementById('pin-input').value='';
+  document.getElementById('pin-error').textContent='';
+  state.pinStep=0;state.pinFirst='';
+}
+function handlePin(){
+  const val=document.getElementById('pin-input').value;
+  const err=document.getElementById('pin-error');
+  if(state.dadPin){
+    if(val===state.dadPin){go('dad');}
+    else{err.textContent='PIN incorrecto';}
+    return;
+  }
+  if(state.pinStep===0){
+    if(val.length<4){err.textContent='Mínimo 4 dígitos';return;}
+    state.pinFirst=val;state.pinStep=1;
+    document.getElementById('pin-subtitle').textContent='Confirma tu PIN';
+    document.getElementById('pin-btn').textContent='Confirmar';
+    document.getElementById('pin-input').value='';err.textContent='';
+  } else {
+    if(val===state.pinFirst){
+      state.dadPin=val;save();go('dad');
+    } else {
+      err.textContent='Los PINs no coinciden';
+      document.getElementById('pin-input').value='';
+      state.pinStep=0;state.pinFirst='';
+      document.getElementById('pin-subtitle').textContent='Crea tu PIN (mínimo 4 dígitos)';
+      document.getElementById('pin-btn').textContent='Continuar';
+    }
+  }
+}
+
+// ============ DAD ============
+function renderDad(){
+  document.getElementById('dad-points').textContent=state.points;
+  document.getElementById('dad-streak').textContent=state.streak;
+  document.getElementById('dad-mission-count').textContent=allMissions.length;
+  renderNotes();
+  renderDadMissions();
+}
+function exitDad(){go('home');}
+function addManualPoints(){
+  const v=parseInt(document.getElementById('add-pts-input').value);
+  if(!isNaN(v)){state.points=Math.max(0,state.points+v);save();renderDad();}
+  document.getElementById('add-pts-input').value='';
+}
+function saveNote(){
+  const t=document.getElementById('note-input').value.trim();
+  if(!t) return;
+  state.dadNotes.unshift({text:t,date:new Date().toLocaleDateString()});
+  state.noteViewIdx=0;
+  save();
+  document.getElementById('note-input').value='';
+  renderNotes();
+}
+function renderNotes(){
+  const h=document.getElementById('notes-history');
+  if(state.dadNotes.length===0){h.classList.add('hidden');return;}
+  h.classList.remove('hidden');
+  const idx=state.noteViewIdx;
+  const notes=state.dadNotes;
+  document.getElementById('notes-count').textContent=`${notes.length} ${notes.length===1?'nota':'notas'}`;
+  document.getElementById('note-date').textContent=notes[idx].date;
+  document.getElementById('note-index').textContent=`Nota ${notes.length-idx} de ${notes.length}`;
+  document.getElementById('note-text').textContent=notes[idx].text;
+  document.getElementById('note-prev').style.opacity=idx>=notes.length-1?'0.3':'1';
+  document.getElementById('note-next').style.opacity=idx<=0?'0.3':'1';
+  const dots=document.getElementById('note-dots');
+  dots.innerHTML='';
+  notes.forEach((_,i)=>{
+    const d=document.createElement('button');
+    d.className='dot';
+    d.style.background=i===idx?'#E8690B':'#243B55';
+    d.onclick=()=>{state.noteViewIdx=i;renderNotes();};
+    dots.appendChild(d);
+  });
+}
+function navNote(dir){
+  const max=state.dadNotes.length-1;
+  state.noteViewIdx=Math.max(0,Math.min(max,state.noteViewIdx+dir));
+  renderNotes();
+}
+function toggleAddMission(){
+  state.addMissionOpen=!state.addMissionOpen;
+  const f=document.getElementById('add-mission-form');
+  state.addMissionOpen?f.classList.remove('hidden'):f.classList.add('hidden');
+}
+function addCustomMission(){
+  const title=document.getElementById('nm-title').value.trim();
+  const desc=document.getElementById('nm-desc').value.trim();
+  if(!title||!desc) return;
+  const nm={
+    id:'c-'+Date.now(),rank:document.getElementById('nm-rank').value,
+    pillar:document.getElementById('nm-pillar').value,lvl:1,
+    title,description:desc,howto:document.getElementById('nm-howto').value,
+    points:parseInt(document.getElementById('nm-pts').value)||20,
+    completed:false,
+    resource:{label:document.getElementById('nm-res-label').value,url:document.getElementById('nm-res-url').value}
+  };
+  state.customMissions.push(nm);
+  allMissions.push(nm);
+  save();
+  ['nm-title','nm-desc','nm-howto','nm-pts','nm-res-label','nm-res-url'].forEach(id=>document.getElementById(id).value='');
+  toggleAddMission();
+  renderDad();
+}
+function renderDadMissions(){
+  const list=document.getElementById('dad-mission-list');
+  list.innerHTML='';
+  allMissions.forEach(m=>{
+    const p=getPillar(m.pillar);
+    const div=document.createElement('div');
+    div.style.cssText=`display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#0D1B2A;border-radius:10px;margin-bottom:6px;border-left:3px solid ${p.color}`;
+    div.innerHTML=`<div>
+      <div style="font-weight:700;font-size:13px">${m.title}</div>
+      <div style="color:#4A5568;font-size:11px">${p.short} · ${RANKS.find(r=>r.id===m.rank)?.name||''} · ${m.points}pts</div>
+    </div>
+    ${m.completed?'<span style="color:#27AE60">✓</span>':`<button class="btn btn-green" style="padding:5px 10px;font-size:12px" onclick="completeMissionDad('${m.id}')">✓</button>`}`;
+    list.appendChild(div);
+  });
+}
+function completeMissionDad(id){
+  const m=allMissions.find(x=>x.id===id);
+  if(!m||m.completed) return;
+  m.completed=true;
+  if(!state.completedIds.includes(id)) state.completedIds.push(id);
+  state.points+=m.points;
+  save();checkBadges();renderDad();
+}
+
+function clearFilter(){state.activePillar=null;renderHome();}
+
+// ============ INIT ============
+load();
+renderHome();</script>
+</body>
+</html>
